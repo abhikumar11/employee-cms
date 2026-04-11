@@ -1,10 +1,9 @@
-import DataForm from "@/components/common/DataForm";
-
-export default function Home() {
-  return (
-  <div>
-      {/* <p>Employee CMS</p> */}
-      <DataForm/>  
-  </div>
-  );
+import UserForm from "@/components/UserForm";
+const Home = () => {
+     return (
+          <div>
+               <UserForm />
+          </div>
+     );
 }
+export default Home;

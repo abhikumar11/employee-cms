@@ -1,11 +1,21 @@
 "use client";
+import { DataFormProps, Employee } from "@/types/employe.types";
 import { Col, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-const DataForm = () => {
-     const { register, handleSubmit,formState:{errors} } = useForm();
+const DataForm = ({ title, formAction }: DataFormProps) => {
+     const {
+          register,
+          handleSubmit,
+          formState: { errors },
+     } = useForm<Employee>();
+
+      const onSubmit = (data: Employee) => {
+          formAction(data);
+     }
      return (
           <div className="p-4">
-               <form onSubmit={handleSubmit((data) => console.log(data))}>
+               <p>{title}</p>
+               <form onSubmit={handleSubmit(onSubmit)}>
                     <Row className="mb-3">
                          <Col md={6}>
                               <label className="form-label">
@@ -17,19 +27,19 @@ const DataForm = () => {
                                    type="text"
                                    className="form-control"
                                    placeholder="John Doe"
-                                   {...(register("employeeName",
-                                   { required: "Employee name is required",
-                                    pattern: {
-                                        value: /^[A-Za-z\s]+$/,
-                                        message: "Name can only contain letters and spaces",
-                                    },
-                                    }))}
+                                   {...register("name", {
+                                        required: "Employee name is required",
+                                        pattern: {
+                                             value: /^[A-Za-z\s]+$/,
+                                             message: "Name can only contain letters and spaces",
+                                        },
+                                   })}
                               />
-                                {errors.employeeName && (
-                                     <p className="text-danger">
-                                          {errors.employeeName.message}
-                                     </p>
-                                )}
+                              {errors.name && (
+                                   <p className="text-danger">
+                                        {errors.name.message}
+                                   </p>
+                              )}
                          </Col>
                     </Row>
                     <Row className="mb-3">
@@ -41,7 +51,7 @@ const DataForm = () => {
                                    type="number"
                                    className="form-control"
                                    placeholder="25"
-                                   {...register("employeeAge", {
+                                   {...register("age", {
                                         required: "Employee age is required",
                                         min: {
                                              value: 18,
@@ -53,9 +63,9 @@ const DataForm = () => {
                                         },
                                    })}
                               />
-                              {errors.employeeAge && (
+                              {errors.age && (
                                    <p className="text-danger">
-                                        {errors.employeeAge.message}
+                                        {errors.age.message}
                                    </p>
                               )}
                          </Col>
@@ -71,18 +81,18 @@ const DataForm = () => {
                                    type="text"
                                    className="form-control"
                                    placeholder="name@company.com"
-                                   {...register("employeeEmail",{
-                                    required: "Email is required",
-                                    pattern: {
-                                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                        message: "Please enter a valid email address",
-                                    },
+                                   {...register("email", {
+                                        required: "Email is required",
+                                        pattern: {
+                                             value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                             message: "Please enter a valid email address",
+                                        },
                                    })}
                               />
-                              {errors.employeeEmail &&(
-                                      <p className="text-danger">
-                                             {errors.employeeEmail.message} 
-                                      </p>
+                              {errors.email && (
+                                   <p className="text-danger">
+                                        {errors.email.message}
+                                   </p>
                               )}
                          </Col>
                     </Row>
@@ -94,8 +104,8 @@ const DataForm = () => {
                          <Col md={6}>
                               <select
                                    className="form-select"
-                                   {...register("employeeDepartment",{
-                                    required: "Department is required",
+                                   {...register("department", {
+                                        required: "Department is required",
                                    })}
                               >
                                    <option value="">Select Department</option>
@@ -107,11 +117,11 @@ const DataForm = () => {
                                    </option>
                                    <option value={"HR"}>HR</option>
                               </select>
-                              {errors.employeeDepartment && (
-    <p className="text-danger small">
-      {errors.employeeDepartment.message}
-    </p>
-  )}
+                              {errors.department && (
+                                   <p className="text-danger small">
+                                        {errors.department.message}
+                                   </p>
+                              )}
                          </Col>
                     </Row>
                     <Row className="mb-3">
@@ -122,22 +132,24 @@ const DataForm = () => {
                               <input
                                    type="date"
                                    className="form-control"
-                                   {...register("employeeJoiningDate",{
-                                    required: "Joining date is required",
-                                    validate: (value) => {
-                                        const selectedDate = new Date(value);
-                                        const today = new Date();
-                                        if (selectedDate > today) {
-                                            return "Joining date cannot be the future date";
-                                        }
-                                    }   
+                                   {...register("joiningDate", {
+                                        required: "Joining date is required",
+                                        validate: (value) => {
+                                             const selectedDate = new Date(
+                                                  value,
+                                             );
+                                             const today = new Date();
+                                             if (selectedDate > today) {
+                                                  return "Joining date cannot be the future date";
+                                             }
+                                        },
                                    })}
                               />
-                              {errors.employeeJoiningDate && (
-    <p className="text-danger small">
-      {errors.employeeJoiningDate.message}
-    </p>
-  )}
+                              {errors.joiningDate && (
+                                   <p className="text-danger small">
+                                        {errors.joiningDate.message}
+                                   </p>
+                              )}
                          </Col>
                     </Row>
                     <button type="submit" className="btn btn-primary">
