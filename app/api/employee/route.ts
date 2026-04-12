@@ -15,8 +15,7 @@ export const POST = async (req: Request) => {
     const body = await req.json();
     const user = await EmployeeModel.create(body);
 
-    return NextResponse.json(
-      { user, id: user._id, message: "User created successfully" },
+    return NextResponse.json({data: {user,message: "User created successfully" }},
       { status: 201 }
     );
   } catch (error) {
