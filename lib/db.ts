@@ -1,11 +1,16 @@
 import mongoose from "mongoose";
-const MONGO_URI = process.env.MONGO_URI;
+import dns from "dns";
+dns.setServers(["8.8.8.8","1.1.1.1"]);
+const MONGO_URI = process.env.MONGO_URI!;
 
 export const connectDB = async () => {
-    try{
-        await mongoose.connect(MONGO_URI!);
-        console.log("Connected to MongoDB");
-    }catch(err){
-        console.error("Error connecting to MongoDB:", err);
-    }
-}
+  if (mongoose.connection.readyState >= 1) {
+    return;
+  }
+  try {
+    await mongoose.connect(MONGO_URI);
+    console.log("Connected to db");
+  } catch (err) {
+    console.error("Error connecting:", err);
+  }
+};
