@@ -1,16 +1,28 @@
 "use client";
 
-import useEmployee from "@/hooks/useEmployee";
 import { Employee } from "@/types/employe.types";
-import { Table } from "react-bootstrap";
+import { Button, ButtonGroup, Table } from "react-bootstrap";
 
-const UserTable = () => {
-  const { employees, isLoading } = useEmployee();
+interface UserTableProps {
+  employees?: Employee[];
+  isLoading?: boolean;
+  isDeleting?: boolean;
+  onEdit: (employee: Employee) => void;
+  onDelete: (employee: Employee) => void;
+}
+
+const UserTable = ({
+  employees,
+  isLoading,
+  isDeleting,
+  onEdit,
+  onDelete,
+}: UserTableProps) => {
 
   if (isLoading) return <p>Loading...</p>;
 
   return (
-    <Table striped bordered hover>
+    <Table striped bordered hover responsive>
       <thead>
         <tr>
           <th>Name</th>
@@ -18,13 +30,14 @@ const UserTable = () => {
           <th>Age</th>
           <th>Designation</th>
           <th>Date of Joining</th>
+          <th className="text-center">Actions</th>
         </tr>
       </thead>
 
       <tbody>
         {employees?.length === 0 ? (
           <tr>
-            <td colSpan={5} className="text-center">
+            <td colSpan={6} className="text-center">
               No Employees Found
             </td>
           </tr>
@@ -37,6 +50,23 @@ const UserTable = () => {
               <td>{employee.department}</td>
               <td>
                 {new Date(employee.joiningDate).toLocaleDateString()}
+              </td>
+              <td className="text-center">
+                <ButtonGroup size="sm">
+                  <Button
+                    variant="outline-primary"
+                    onClick={() => onEdit(employee)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="outline-danger"
+                    onClick={() => onDelete(employee)}
+                    disabled={isDeleting}
+                  >
+                    Delete
+                  </Button>
+                </ButtonGroup>
               </td>
             </tr>
           ))

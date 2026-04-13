@@ -10,7 +10,7 @@ const useEmployee = () => {
   const saveNewEmployeeMutation = useMutation({
     mutationFn: async (employee: Employee) => {
       const res = await api.post("/employee", employee);
-       return res.data.employees ?? [];
+      return res.data.data.user as Employee;
     },
 
     onSuccess: () => {
@@ -37,6 +37,21 @@ const useEmployee = () => {
     },
   });
 
+  const deleteEmployeeMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await api.delete(`/employee/${id}`);
+      return id;
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["employee"] });
+    },
+
+    onError: (error) => {
+      console.log("Error deleting employee:", error);
+    },
+  });
+
   const getAllEmployeeQuery =  useQuery({
   queryKey: ["employee"],
   queryFn: async () => {
@@ -49,8 +64,10 @@ const useEmployee = () => {
     isLoading: getAllEmployeeQuery.isLoading,
     saveNewEmployee: saveNewEmployeeMutation.mutateAsync,
     updateEmployee: updateEmployeeMutation.mutateAsync,
+    deleteEmployee: deleteEmployeeMutation.mutateAsync,
     isSaving: saveNewEmployeeMutation.isPending,
     isUpdating: updateEmployeeMutation.isPending,
+    isDeleting: deleteEmployeeMutation.isPending,
   };
 };
 

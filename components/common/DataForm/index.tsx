@@ -1,11 +1,11 @@
 "use client";
 
 import { DataFormProps, Employee } from "@/types/employe.types";
+import { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 
 const DataForm = ({
-  title,
   formAction,
   defaultValues,
   isLoading,
@@ -22,6 +22,19 @@ const DataForm = ({
     defaultValues,
   });
 
+  useEffect(() => {
+    reset({
+      _id: defaultValues?._id,
+      name: defaultValues?.name ?? "",
+      age: defaultValues?.age ?? undefined,
+      email: defaultValues?.email ?? "",
+      department: defaultValues?.department ?? "",
+      joiningDate: defaultValues?.joiningDate
+        ? new Date(defaultValues.joiningDate).toISOString().split("T")[0]
+        : "",
+    });
+  }, [defaultValues, reset]);
+
   const onSubmit = async (data: Employee) => {
     await formAction(data);
     reset();
@@ -29,8 +42,6 @@ const DataForm = ({
 
   return (
     <div className="p-4">
-      <h5>{title}</h5>
-
       <form onSubmit={handleSubmit(onSubmit)}>
       
         <Row className="mb-3">
