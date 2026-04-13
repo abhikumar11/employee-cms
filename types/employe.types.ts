@@ -1,12 +1,12 @@
 export interface Employee{
-    id: number;
+    _id?: string;
     name: string;
     age: number;
     email: string;
     department: string;
-    joiningDate: Date;
+    joiningDate: Date | string;
 }
 export interface DataFormProps{
     title: string;
-    formAction:(data:Employee)=> void;
+    formAction:(data:Employee)=> Promise<Employee> | void;
 }
