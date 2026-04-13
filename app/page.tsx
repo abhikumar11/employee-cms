@@ -1,7 +1,9 @@
-export default function Home() {
-  return (
-  <div>
-      <p>Employee CMS</p>  
-  </div>
-  );
+import UserForm from "@/components/UserForm";
+const Home = () => {
+     return (
+          <div>
+               <UserForm />
+          </div>
+     );
 }
+export default Home;
