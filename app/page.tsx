@@ -1,9 +1,7 @@
+"use client";
 import UserForm from "@/components/UserForm";
+
 const Home = () => {
-     return (
-          <div>
-               <UserForm />
-          </div>
-     );
-}
+     return <UserForm />;
+};
 export default Home;

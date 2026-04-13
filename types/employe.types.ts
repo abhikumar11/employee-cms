@@ -7,6 +7,5 @@ export interface Employee{
     joiningDate: Date | string;
 }
 export interface DataFormProps{
-    title: string;
-    formAction:(data:Employee)=> Promise<Employee> | void;
+    formAction:(data:Employee)=> Promise<void | Employee> | void;
 }
